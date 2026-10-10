@@ -19,7 +19,7 @@ namespace BeamTimer {
         }
 
         public override string GetVersion() {
-            return "1.0.0.0";
+            return "1.0.1";
         }
 
         public void Unload() {
