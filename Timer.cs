@@ -1,6 +1,6 @@
 using HutongGames.PlayMaker;
 using HutongGames.PlayMaker.Actions;
-using ModCommon.Util;
+using SFCore.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 using Logger = Modding.Logger;
@@ -35,6 +35,8 @@ internal class Timer : MonoBehaviour {
     }
 
     private void Update() {
+        timer.enabled = BeamTimer.BeamTimer.settings.showTimer;
+
         if (abs == null) {
             abs = GameObject.Find("Absolute Radiance");
             actionAdded = false;

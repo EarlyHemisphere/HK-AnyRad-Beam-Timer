@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using Modding;
+using Satchel.BetterMenus;
 using UnityEngine;
 
 namespace BeamTimer {
-    public class BeamTimer : Mod {
+    public class BeamTimer : Mod, IGlobalSettings<GlobalSettings>, ICustomMenuMod {
         internal static BeamTimer instance;
 
         internal static bool created;
@@ -19,7 +20,7 @@ namespace BeamTimer {
         }
 
         public override string GetVersion() {
-            return "1.0.1";
+            return "1.1.0";
         }
 
         public void Unload() {
@@ -33,6 +34,33 @@ namespace BeamTimer {
 
             new GameObject("BeamTimer", typeof(Timer));
             created = true;
+        }
+
+        public static GlobalSettings settings { get; private set; } = new GlobalSettings();
+
+        public void OnLoadGlobal(GlobalSettings s) => settings = s;
+
+        public GlobalSettings OnSaveGlobal() => settings;
+
+        public bool ToggleButtonInsideMenu => false;
+
+        private Menu menuRef;
+
+        public MenuScreen GetMenuScreen(MenuScreen modListMenu, ModToggleDelegates? toggleDelegates) {
+            menuRef ??= new Menu(
+                "Beam Timer",
+                new Element[] {
+                    new HorizontalOption(
+                        name: "Show Timer",
+                        description: "",
+                        values: new string[] {"False", "True"},
+                        applySetting: val => settings.showTimer = val == 1,
+                        loadSetting: () => settings.showTimer ? 1 : 0
+                    )
+                }
+            );
+
+            return menuRef.GetMenuScreen(modListMenu);
         }
     }
 }
